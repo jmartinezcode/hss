@@ -242,7 +242,6 @@ namespace HumaneSociety
             Animal animalFromDb = GetAnimalByID(animalId);
             foreach (KeyValuePair<int,string> update in updates)
             {
-
                 switch (update.Key)
                 {
                     case 1:
@@ -318,9 +317,7 @@ namespace HumaneSociety
 
                     case 8:
                         return db.Animals.Where(a => a.CategoryId == int.Parse(update.Value)).Select(a => a);
-
-                }
-                
+                }                
             }
             return null;
         }
