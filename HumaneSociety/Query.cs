@@ -191,7 +191,7 @@ namespace HumaneSociety
                     catch (InvalidOperationException)
                     {
                         Console.WriteLine("No employees have a EmployeeID that matches the Employee passed in.");
-                        Console.WriteLine("No update have been made.");
+                        Console.WriteLine("No update has been made.");
                         return;
                     }
                     employeeFromDb.FirstName = employee.FirstName;
@@ -216,28 +216,43 @@ namespace HumaneSociety
                     db.Employees.DeleteOnSubmit(employeeFromDb);
                     db.SubmitChanges();
                     break;
-                default:
-
-                    break;
             }
-
-
         }
 
         // TODO: Animal CRUD Operations
         internal static void AddAnimal(Animal animal)
         {
-            
+            db.Animals.InsertOnSubmit(animal);
+            db.SubmitChanges();
         }
 
         internal static Animal GetAnimalByID(int id)
         {
-            throw new NotImplementedException();
+            if (db.Animals.Select(a => a.AnimalId == id) == null)
+            {
+                throw new NullReferenceException();
+            }
+            else
+            {
+                return db.Animals.Where(a => a.AnimalId == id).FirstOrDefault();
+            }
         }
 
         internal static void UpdateAnimal(int animalId, Dictionary<int, string> updates)
-        {            
-            throw new NotImplementedException();
+        {
+            Animal animalFromDb = null;
+            try
+            {
+                animalFromDb = db.Animals.Where(a => a.AnimalId == animalId).Single();
+            }
+            catch (InvalidOperationException)
+            {
+                Console.WriteLine("No animals have an AnimalID that matches the AnimalID passed in.");
+                Console.WriteLine("No update has been made.");
+                return;
+            }
+       
+            db.SubmitChanges();
         }
 
         internal static void RemoveAnimal(Animal animal)
