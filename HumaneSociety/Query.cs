@@ -244,6 +244,9 @@ namespace HumaneSociety
             try
             {
                 animalFromDb = db.Animals.Where(a => a.AnimalId == animalId).Single();
+                //animalFromDb.Category = updates[1];
+                //animalFromDb.Demeanor = updates[4];
+
             }
             catch (InvalidOperationException)
             {
@@ -257,7 +260,8 @@ namespace HumaneSociety
 
         internal static void RemoveAnimal(Animal animal)
         {
-            throw new NotImplementedException();
+            db.Animals.DeleteOnSubmit(animal);
+            db.SubmitChanges();
         }
         
         // TODO: Animal Multi-Trait Search
@@ -269,17 +273,20 @@ namespace HumaneSociety
         // TODO: Misc Animal Things
         internal static int GetCategoryId(string categoryName)
         {
-            throw new NotImplementedException();
+            var category = db.Categories.Where(c => c.Name == categoryName).SingleOrDefault();
+            return category.CategoryId;
         }
         
         internal static Room GetRoom(int animalId)
         {
-            throw new NotImplementedException();
+            var room = db.Rooms.Where(a => a.AnimalId == animalId).SingleOrDefault();
+            return room;
         }
         
         internal static int GetDietPlanId(string dietPlanName)
         {
-            throw new NotImplementedException();
+            var diet = db.DietPlans.Where(p => p.Name == dietPlanName).SingleOrDefault();
+            return diet.DietPlanId;
         }
 
         // TODO: Adoption CRUD Operations
