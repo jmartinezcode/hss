@@ -165,14 +165,69 @@ namespace HumaneSociety
         
         // TODO: Allow any of the CRUD operations to occur here
         internal static void RunEmployeeQueries(Employee employee, string crudOperation)
-        {
-            throw new NotImplementedException();
+        {            
+            switch (crudOperation)
+            {                
+                case "create": //CREATE
+                    db.Employees.InsertOnSubmit(employee);
+                    db.SubmitChanges();
+                    break;
+                case "read": //READ
+                    if (db.Employees.Select(e => e.EmployeeNumber == employee.EmployeeNumber) == null)
+                    {
+                        throw new NullReferenceException();
+                    }
+                    else
+                    {
+                        db.Employees.Where(e => e.EmployeeNumber == employee.EmployeeNumber).FirstOrDefault();
+                    }
+                    break;
+                case "update": //UPDATE
+                    Employee employeeFromDb = null;
+                    try
+                    {
+                        employeeFromDb = db.Employees.Where(e => e.EmployeeId == employee.EmployeeId).Single();
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        Console.WriteLine("No employees have a EmployeeID that matches the Employee passed in.");
+                        Console.WriteLine("No update have been made.");
+                        return;
+                    }
+                    employeeFromDb.FirstName = employee.FirstName;
+                    employeeFromDb.LastName = employee.LastName;
+                    employeeFromDb.UserName = employee.UserName;
+                    employeeFromDb.Password = employee.Password;
+                    employeeFromDb.EmployeeNumber = employee.EmployeeNumber;
+                    employeeFromDb.Email = employee.Email;
+                    db.SubmitChanges();
+                    break;
+                case "delete": //DELETE                     
+                    try
+                    {
+                        employeeFromDb = db.Employees.Where(e => e.EmployeeId == employee.EmployeeId).Single();
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        Console.WriteLine("No employees have a EmployeeID that matches the Employee passed in.");
+                        Console.WriteLine("No changes have been made.");
+                        return;
+                    }
+                    db.Employees.DeleteOnSubmit(employeeFromDb);
+                    db.SubmitChanges();
+                    break;
+                default:
+
+                    break;
+            }
+
+
         }
 
         // TODO: Animal CRUD Operations
         internal static void AddAnimal(Animal animal)
         {
-            throw new NotImplementedException();
+            
         }
 
         internal static Animal GetAnimalByID(int id)
