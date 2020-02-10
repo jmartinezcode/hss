@@ -218,7 +218,7 @@ namespace HumaneSociety
                     break;
             }
         }
-        
+         
         internal static void AddAnimal(Animal animal)
         {
             db.Animals.InsertOnSubmit(animal);
@@ -290,39 +290,39 @@ namespace HumaneSociety
         internal static IQueryable<Animal> SearchForAnimalsByMultipleTraits(Dictionary<int, string> updates) // parameter(s)?
         {
             //"1. Category", "2. Name", "3. Age", "4. Demeanor", "5. Kid friendly", "6. Pet friendly", "7. Weight", "8. ID"
-
+            var animal = db.Animals.Select(a => a);
             foreach (KeyValuePair<int, string> update in updates)
             {
                 switch (update.Key)
                 {
                     case 1:
-                        return db.Animals.Where(a => a.Category.Name == update.Value).Select(a => a);
-
+                        animal = animal.Where(a => a.Category.Name == update.Value);
+                        break;
                     case 2:
-                        return db.Animals.Where(a => a.Name == update.Value).Select(a => a);
-
+                        animal = animal.Where(a => a.Name == update.Value);
+                        break;
                     case 3:
-                        return db.Animals.Where(a => a.Age == int.Parse(update.Value)).Select(a => a);
-
+                        animal = animal.Where(a => a.Age == int.Parse(update.Value));
+                        break;
                     case 4:
-                        return db.Animals.Where(a => a.Demeanor == update.Value).Select(a => a);
-
+                        animal = animal.Where(a => a.Demeanor == update.Value);
+                        break;
                     case 5:
-                        return db.Animals.Where(a => a.KidFriendly == bool.Parse(update.Value)).Select(a => a);
-
+                        animal = animal.Where(a => a.KidFriendly == bool.Parse(update.Value));
+                        break;
                     case 6:
-                        return db.Animals.Where(a => a.PetFriendly == bool.Parse(update.Value)).Select(a => a);
-
+                        animal = animal.Where(a => a.PetFriendly == bool.Parse(update.Value));
+                        break;
                     case 7:
-                        return db.Animals.Where(a => a.Weight == int.Parse(update.Value)).Select(a => a);
-
+                        animal = animal.Where(a => a.Weight == int.Parse(update.Value));
+                        break;
                     case 8:
-                        return db.Animals.Where(a => a.CategoryId == int.Parse(update.Value)).Select(a => a);
-
+                        animal = animal.Where(a => a.CategoryId == int.Parse(update.Value));
+                        break;
                 }
                 
             }
-            return null;
+            return animal;
         }
          
         // TODO: Misc Animal Things
