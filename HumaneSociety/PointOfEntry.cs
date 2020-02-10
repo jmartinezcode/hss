@@ -25,17 +25,11 @@ namespace HumaneSociety
             switch (input.ToLower())
             {
                 case "customer":
+                case "2":
                     customer = new Customer();
                     customer.LogIn();
-                     break;
-                case"2":
-                    customer = new Customer();
-                    customer.LogIn();
-                    break;
+                     break;                
                 case "employee":
-                    employee = new UserEmployee();
-                    employee.LogIn();
-                    break;
                 case "1":
                     employee = new UserEmployee();
                     employee.LogIn();
