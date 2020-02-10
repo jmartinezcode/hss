@@ -240,30 +240,93 @@ namespace HumaneSociety
 
         internal static void UpdateAnimal(int animalId, Dictionary<int, string> updates)
         {
-            Animal animalFromDb = null;
-            try
+            Animal animalFromDb = GetAnimalByID(animalId);
+            foreach (KeyValuePair<int,string> update in updates)
             {
-                animalFromDb = db.Animals.Where(a => a.AnimalId == animalId).Single();
+                switch (update.Key)
+                {
+                    case 1:
+                        animalFromDb.Category = db.Categories.Where(a => a.Name == update.Value).Single();
+                        db.SubmitChanges();
+                        break;
+                    case 2:
+                        animalFromDb.Name = update.Value;
+                        db.SubmitChanges();
+                        break;
+                    case 3:
+                        animalFromDb.Age = int.Parse(update.Value);
+                        db.SubmitChanges();
+                        break;
+                    case 4:
+                        animalFromDb.Demeanor = update.Value;
+                        db.SubmitChanges();
+                        break;
+                    case 5:
+                        animalFromDb.KidFriendly = bool.Parse(update.Value);
+                        db.SubmitChanges();
+                        break;
+                    case 6:
+                        animalFromDb.PetFriendly = bool.Parse(update.Value);
+                        db.SubmitChanges();
+                        break;
+                    case 7:
+                        animalFromDb.Weight = int.Parse(update.Value);
+                        db.SubmitChanges();
+                        break;
+                    default:
+                        break;
+                }
             }
-            catch (InvalidOperationException)
-            {
-                Console.WriteLine("No animals have an AnimalID that matches the AnimalID passed in.");
-                Console.WriteLine("No update has been made.");
-                return;
-            }
-       
+           
+
+
             db.SubmitChanges();
+
         }
 
         internal static void RemoveAnimal(Animal animal)
         {
+
             throw new NotImplementedException();
         }
         
         // TODO: Animal Multi-Trait Search
         internal static IQueryable<Animal> SearchForAnimalsByMultipleTraits(Dictionary<int, string> updates) // parameter(s)?
         {
-            throw new NotImplementedException();
+            //"1. Category", "2. Name", "3. Age", "4. Demeanor", "5. Kid friendly", "6. Pet friendly", "7. Weight", "8. ID"
+
+            foreach (KeyValuePair<int, string> update in updates)
+            {
+                switch (update.Key)
+                {
+                    case 1:
+                        return db.Animals.Where(a => a.Category.Name == update.Value).Select(a => a);
+
+                    case 2:
+                        return db.Animals.Where(a => a.Name == update.Value).Select(a => a);
+
+                    case 3:
+                        return db.Animals.Where(a => a.Age == int.Parse(update.Value)).Select(a => a);
+
+                    case 4:
+                        return db.Animals.Where(a => a.Demeanor == update.Value).Select(a => a);
+
+                    case 5:
+                        return db.Animals.Where(a => a.KidFriendly == bool.Parse(update.Value)).Select(a => a);
+
+                    case 6:
+                        return db.Animals.Where(a => a.PetFriendly == bool.Parse(update.Value)).Select(a => a);
+
+                    case 7:
+                        return db.Animals.Where(a => a.Weight == int.Parse(update.Value)).Select(a => a);
+
+                    case 8:
+                        return db.Animals.Where(a => a.CategoryId == int.Parse(update.Value)).Select(a => a);
+
+                }
+                
+            }
+            return null;
         }
          
         // TODO: Misc Animal Things
