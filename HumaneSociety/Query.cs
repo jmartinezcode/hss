@@ -242,7 +242,6 @@ namespace HumaneSociety
             Animal animalFromDb = GetAnimalByID(animalId);
             foreach (KeyValuePair<int,string> update in updates)
             {
-
                 switch (update.Key)
                 {
                     case 1:
@@ -320,7 +319,6 @@ namespace HumaneSociety
                         animal = animal.Where(a => a.CategoryId == int.Parse(update.Value));
                         break;
                 }
-                
             }
             return animal;
         }
@@ -347,6 +345,7 @@ namespace HumaneSociety
         // TODO: Adoption CRUD Operations
         internal static void Adopt(Animal animal, Client client)
         {
+
             if (animal.AdoptionStatus == "Available") 
             {
 
@@ -371,11 +370,12 @@ namespace HumaneSociety
                 }
             }
             UserInterface.DisplayUserOptions("This pet is not available.");
+
         }
 
         internal static IQueryable<Adoption> GetPendingAdoptions()
         {
-            throw new NotImplementedException();
+            return db.Adoptions.Where(a => a.ApprovalStatus == "pending");
         }
 
         internal static void UpdateAdoption(bool isAdopted, Adoption adoption)
