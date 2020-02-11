@@ -169,54 +169,78 @@ namespace HumaneSociety
             switch (crudOperation)
             {                
                 case "create": //CREATE
-                    db.Employees.InsertOnSubmit(employee);
-                    db.SubmitChanges();
+                    AddEmployee(employee);
                     break;
                 case "read": //READ
-                    if (db.Employees.Select(e => e.EmployeeNumber == employee.EmployeeNumber) == null)
-                    {
-                        throw new NullReferenceException();
-                    }
-                    else
-                    {
-                        db.Employees.Where(e => e.EmployeeNumber == employee.EmployeeNumber).FirstOrDefault();
-                    }
+                    ReadEmployee(employee);
                     break;
                 case "update": //UPDATE
-                    Employee employeeFromDb = null;
-                    try
-                    {
-                        employeeFromDb = db.Employees.Where(e => e.EmployeeId == employee.EmployeeId).Single();
-                    }
-                    catch (InvalidOperationException)
-                    {
-                        Console.WriteLine("No employees have a EmployeeID that matches the Employee passed in.");
-                        Console.WriteLine("No update has been made.");
-                        return;
-                    }
-                    employeeFromDb.FirstName = employee.FirstName;
-                    employeeFromDb.LastName = employee.LastName;
-                    employeeFromDb.UserName = employee.UserName;
-                    employeeFromDb.Password = employee.Password;
-                    employeeFromDb.EmployeeNumber = employee.EmployeeNumber;
-                    employeeFromDb.Email = employee.Email;
-                    db.SubmitChanges();
+                    UpdateEmployee(employee);
                     break;
                 case "delete": //DELETE                     
-                    try
-                    {
-                        employeeFromDb = db.Employees.Where(e => e.EmployeeId == employee.EmployeeId).Single();
-                    }
-                    catch (InvalidOperationException)
-                    {
-                        Console.WriteLine("No employees have a EmployeeID that matches the Employee passed in.");
-                        Console.WriteLine("No changes have been made.");
-                        return;
-                    }
-                    db.Employees.DeleteOnSubmit(employeeFromDb);
-                    db.SubmitChanges();
+                    DeleteEmployee(employee);
                     break;
             }
+        }
+        internal static void AddEmployee(Employee employee)
+        {
+            if (db.Employees.Select(e => e.EmployeeNumber == employee.EmployeeNumber) != null)
+            {
+                UserInterface.DisplayUserOptions("Employee already exists");
+            }
+            else
+            {
+                db.Employees.InsertOnSubmit(employee);
+                db.SubmitChanges(); ;
+            }
+        }
+        internal static void ReadEmployee(Employee employee)
+        {
+            if (db.Employees.Select(e => e.EmployeeNumber == employee.EmployeeNumber) == null)
+            {
+                throw new NullReferenceException();
+            }
+            else
+            {
+                db.Employees.Where(e => e.EmployeeNumber == employee.EmployeeNumber).FirstOrDefault();
+            }
+        }
+        internal static void UpdateEmployee(Employee employee)
+        {
+            Employee employeeFromDb = null;
+            try
+            {
+                employeeFromDb = db.Employees.Where(e => e.EmployeeNumber == employee.EmployeeNumber).Single();
+            }
+            catch (InvalidOperationException)
+            {
+                Console.WriteLine("No employees have a EmployeeID that matches the Employee passed in.");
+                Console.WriteLine("No update has been made.");
+                return;
+            }
+            employeeFromDb.FirstName = employee.FirstName;
+            employeeFromDb.LastName = employee.LastName;
+            employeeFromDb.UserName = employee.UserName;
+            employeeFromDb.Password = employee.Password;
+            employeeFromDb.EmployeeNumber = employee.EmployeeNumber;
+            employeeFromDb.Email = employee.Email;
+            db.SubmitChanges();
+        }
+        internal static void DeleteEmployee(Employee employee)
+        {
+            Employee employeeFromDb = null;
+            try
+            {
+                employeeFromDb = db.Employees.Where(e => e.EmployeeNumber == employee.EmployeeNumber).Single();
+            }
+            catch (InvalidOperationException)
+            {
+                Console.WriteLine("No employees have a EmployeeID that matches the Employee passed in.");
+                Console.WriteLine("No changes have been made.");
+                return;
+            }
+            db.Employees.DeleteOnSubmit(employeeFromDb);
+            db.SubmitChanges();
         }
          
         internal static void AddAnimal(Animal animal)
@@ -450,6 +474,7 @@ namespace HumaneSociety
                 db.AnimalShots.InsertOnSubmit(animalShot);
                 db.SubmitChanges();
             }
+
             animalShot.ShotId = shotFromDb.ShotId;
         }
     }
