@@ -398,7 +398,38 @@ namespace HumaneSociety
 
         internal static void UpdateShot(string shotName, Animal animal)
         {
-            throw new NotImplementedException();
+            AnimalShot animalShot = null;
+            Shot shotFromDb = null;
+            try
+            {
+                animalShot = db.AnimalShots.Where(s => s.AnimalId == animal.AnimalId && s.ShotId == animalShot.ShotId).FirstOrDefault();
+                shotFromDb = db.Shots.Where(s => s.Name == shotName).FirstOrDefault();
+            }
+            catch (Exception)
+            {
+
+                UserInterface.DisplayUserOptions("Unable to update Shot");
+            }            
+            if (shotFromDb == null)
+            {
+                Shot shot = new Shot();
+                shot.Name = shotName;
+                animalShot.DateReceived = DateTime.Today;
+                animalShot.Shot = shot;
+                animalShot.Animal = animal;
+                db.Shots.InsertOnSubmit(shot);
+                db.SubmitChanges();
+            }            
+            if (animalShot == null)
+            {
+                animalShot = new AnimalShot();
+                animalShot.AnimalId = animal.AnimalId;
+                animalShot.ShotId = shotFromDb.ShotId;
+                animalShot.DateReceived = DateTime.Today;
+                db.AnimalShots.InsertOnSubmit(animalShot);
+                db.SubmitChanges();
+            }
+            animalShot.ShotId = shotFromDb.ShotId;
         }
     }
 }
