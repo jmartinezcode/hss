@@ -316,15 +316,9 @@ namespace HumaneSociety
                         animal = animal.Where(a => a.Weight == int.Parse(update.Value));
                         break;
                     case 8:
-<<<<<<< HEAD
-                        return db.Animals.Where(a => a.CategoryId == int.Parse(update.Value)).Select(a => a);
-                }                
-=======
                         animal = animal.Where(a => a.CategoryId == int.Parse(update.Value));
                         break;
                 }
-                
->>>>>>> 71ca0f0fd9cc90df6b79bf5c71e36ece1b06d12b
             }
             return animal;
         }
@@ -351,12 +345,13 @@ namespace HumaneSociety
         // TODO: Adoption CRUD Operations
         internal static void Adopt(Animal animal, Client client)
         {
-            throw new NotImplementedException();
+            
+
         }
 
         internal static IQueryable<Adoption> GetPendingAdoptions()
         {
-            throw new NotImplementedException();
+            return db.Adoptions.Where(a => a.ApprovalStatus == "pending");
         }
 
         internal static void UpdateAdoption(bool isAdopted, Adoption adoption)
