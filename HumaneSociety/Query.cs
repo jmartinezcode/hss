@@ -345,7 +345,31 @@ namespace HumaneSociety
         // TODO: Adoption CRUD Operations
         internal static void Adopt(Animal animal, Client client)
         {
-            
+
+            if (animal.AdoptionStatus == "Available") 
+            {
+
+                try
+                {
+                    Adoption newAdoption = new Adoption();
+                    newAdoption.AnimalId = animal.AnimalId;
+                    newAdoption.ClientId = client.ClientId;
+                    newAdoption.AdoptionFee = 75;
+                    newAdoption.PaymentCollected = false;
+                    animal.AdoptionStatus = newAdoption.ApprovalStatus = "pending";
+
+                    animal.Adoptions.Add(newAdoption);
+                    client.Adoptions.Add(newAdoption);
+
+                    db.Adoptions.InsertOnSubmit(newAdoption);
+                    db.SubmitChanges();
+                }
+                catch (Exception)
+                {
+                    UserInterface.DisplayUserOptions("Error in adoption, will now be exiting...");
+                }
+            }
+            UserInterface.DisplayUserOptions("This pet is not available.");
 
         }
 
