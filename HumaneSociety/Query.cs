@@ -380,12 +380,31 @@ namespace HumaneSociety
 
         internal static void UpdateAdoption(bool isAdopted, Adoption adoption)
         {
-            throw new NotImplementedException();
+            Adoption adoptionToBeUpdated = null;
+
+            try
+            {
+                adoptionToBeUpdated = db.Adoptions.Where(a => a.ClientId == adoption.ClientId && a.AnimalId == adoption.AnimalId).FirstOrDefault();
+            }
+            catch (Exception)
+            {
+                UserInterface.DisplayUserOptions("Adoption not found, returning...");
+                return;
+            }
+            if (isAdopted)
+            {
+                adoptionToBeUpdated.ApprovalStatus = "accepted";
+            }
+            else
+            {
+                adoptionToBeUpdated.ApprovalStatus = "declined";
+            }
+            db.SubmitChanges();
         }
 
         internal static void RemoveAdoption(int animalId, int clientId)
         {
-            throw new NotImplementedException();
+           
         }
 
         // TODO: Shots Stuff
